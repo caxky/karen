@@ -1,4 +1,7 @@
 #include <SFML/Graphics.hpp> //includes SFML libraries
+#include "shapeCreator.h"
+#include "spriteCreator.h"
+#include "textCreator.h"
 #include <iostream>
 
 using namespace std;
@@ -9,9 +12,14 @@ int main()
     RenderWindow window(VideoMode(1024,768),"Karen");  //creates a window on the screen that is 800 by 600
     window.setFramerateLimit(60); //sets the game loop to run 60 times per second
 
-    CircleShape shape;  //create a circle object
-    shape.setRadius(100.0); //sets the circles radius to 100, the default is 0
-    shape.setFillColor(Color::Green); //sets the circle fill color to green, the default is white
+    //menus (start and level)
+    bool startOn = false;
+
+    Texture menuTexture = textr("sprites/Titlescreen_Karen.png");
+    Sprite menu = sprite(menuTexture);
+
+    Texture levelsTexture = textr("sprites/Level_select.png");
+    Sprite levels = sprite(levelsTexture);
 
     while (window.isOpen()&& !Keyboard::isKeyPressed(Keyboard::Escape))     //the main game loop, exits if someone closes the window
     {
@@ -22,8 +30,16 @@ int main()
                 window.close();
         }   //ends the event loop
 
+        if (startOn == false && Mouse::isButtonPressed(Mouse::Left) && 8 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 257 && 668 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 755){
+            startOn = true;
+        }
+
         window.clear(); //clears the screen
-        window.draw(shape); //draws the circle to the video card
+        if (startOn){
+            window.draw(levels);
+        } else {
+            window.draw(menu);
+        }
         window.display();   //displays everything on the video card to the monitor
     }   //ends the game loop
 
