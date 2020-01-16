@@ -24,6 +24,9 @@
 			</Target>
 		</Build>
 		<Unit filename="main.cpp" />
+		<Unit filename="shapeCreator.h" />
+		<Unit filename="spriteCreator.h" />
+		<Unit filename="textCreator.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
