@@ -14,7 +14,7 @@ Sprite playerSprite(Texture playerTexture, float posx, float posy, const IntRect
     return player;
 }
 
-Texture tex(const string fileName){
+Texture textr(const string fileName){
     Texture t;
 
     t.loadFromFile(fileName);
