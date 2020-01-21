@@ -32,4 +32,7 @@
 *.out
 *.app
 
+#Codeblocks files
+*.layout
+
 # End of https://www.gitignore.io/api/c++
