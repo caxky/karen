@@ -16,6 +16,14 @@ int main()
     RenderWindow window(VideoMode(1024,768),"Karen");  //creates a window on the screen that is 800 by 600
     window.setFramerateLimit(60); //sets the game loop to run 60 times per second
 
+    //initial console stuff
+    cout<<"Welcome to Karen!\n"<<endl;
+    cout<<"Controls:"<<endl;
+    cout<<"WASD - Move player\nE - Interact with NPC\nESC - Close game\nLeft mouse - Select level/play\n\n"<<endl;
+    cout<<"Objective of the game is to 'free the lost souls' by completing each levels minigame. First you must find the lost soul you're told to find by Michael the archangel, then you complete the minigame they give you."<<endl;
+
+
+
     //menus (start and level)
     bool startOn = false;
     int counter = 0;
@@ -28,7 +36,6 @@ int main()
 
     bool levelOne = false;
     bool levelTwo = false;
-    bool levelThree = false;
 
 
     //introduction slides
@@ -62,21 +69,33 @@ int main()
 
     //lost souls and npcs
     Texture lostSoulTexture1 = textr("sprites/lostsoul_1.png");
-    Sprite lostSoul1 = sprite(lostSoulTexture1, 2, 2, 400, 510);
+    Sprite lostSoul1 = sprite(lostSoulTexture1, 2, 2, 644, 311);
     lostSoul1.setTextureRect(IntRect(0, 0, 16, 16));
+    Texture lostSoulDialogueTexture1 = textr("sprites/dialogue_1.png");
+    Sprite lostSoulDialogue1 = sprite(lostSoulDialogueTexture1);
+
+    bool dialogueLostSoul1 = false;
 
     Texture lostSoulTexture2 = textr("sprites/lostsoul_2.png");
     Sprite lostSoul2 = sprite(lostSoulTexture2, 2, 2, 900, 230);
     lostSoul2.setTextureRect(IntRect(0, 0, 16, 16));
+    Texture lostSoulDialogueTexture2 = textr("sprites/dialogue_2.png");
+    Sprite lostSoulDialogue2 = sprite(lostSoulDialogueTexture2);
+
+    bool dialogueLostSoul2 = false;
 
     Texture lostSoulTexture3 = textr("sprites/lostsoul_3.png");
     Sprite lostSoul3 = sprite(lostSoulTexture3, 2, 2, 200, 300);
     lostSoul3.setTextureRect(IntRect(0, 0, 16, 16));
 
+    Clock dialogueClock;
+    Time dialogueTime;
 
-    //walls and objects
+
+    //walls, objects, and npc collisions
     vector<RectangleShape>globalwall;
     vector<RectangleShape>object;
+    vector<RectangleShape>npcCollision;
 
     globalwall.push_back(rect(-10, -10, 1034, 20, Color::Blue));
     globalwall.push_back(rect(-10, -10, 20, 778, Color::Red));
@@ -88,15 +107,35 @@ int main()
     Texture mapTexture1 = textr("sprites/background_1.png");
     Sprite map1 = sprite(mapTexture1, 5.12, 5.12);
 
+    Texture minigameMapTexture1 = textr("sprites/minigamemap_1.png");
+    Sprite minigameMap1 = sprite(minigameMapTexture1);
+
+    bool minigameOneOn = false;
+
+    vector<RectangleShape>minigameOneGame;
+    Clock minigameOneSpawnClock;
+    Time minigameOneSpawnTime;
+
+    Texture lostSoulDialogueTexture3 = textr("sprites/dialogue_3.png");
+    Sprite lostSoulDialogue3 = sprite(lostSoulDialogueTexture3);
+
+    bool dialogueLostSoul3 = false;
+
+
 
     //level two
-    Texture mapTexture2 = textr("sprites/background_1.png");
+    Texture mapTexture2 = textr("sprites/background_2.png");
     Sprite map2 = sprite(mapTexture2, 5.12, 5.12);
 
+    Texture minigameMapTexture2 = textr("sprites/minigamemap_2.png");
+    Sprite minigameMap2 = sprite(minigameMapTexture2);
 
-    //level three
-    Texture mapTexture3 = textr("sprites/background_1.png");
-    Sprite map3 = sprite(mapTexture3, 5.12, 5.12);
+    bool minigameTwoOn = false;
+
+    Texture lostSoulDialogueTexture4 = textr("sprites/dialogue_4.png");
+    Sprite lostSoulDialogue4 = sprite(lostSoulDialogueTexture4);
+
+    bool dialogueLostSoul4 = false;
 
 
 
@@ -183,6 +222,9 @@ int main()
                 levelOne = true;
                 cout<<"Level one selected"<<endl;
 
+                npcCollision.clear();
+                npcCollision.push_back(rect(657, 325, 5, 5, Color(0, 156, 56)));
+
                 object.clear();
                 object.push_back(rect(81, 2, 10, 278, Color(56, 56, 56)));//building left left
                 object.push_back(rect(0, 270, 91, 10, Color(56,56,56)));
@@ -193,18 +235,21 @@ int main()
                 object.push_back(rect(680, 2, 10, 278, Color(230, 200, 62)));//buildings right
                 object.push_back(rect(680, 270, 340, 10, Color(230, 200, 62)));
 
+                player.setPosition(100, 100);
+
                 menuOn = false;
             }
             else if (startOn == true && Mouse::isButtonPressed(Mouse::Left) && 360 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 660 && 300 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 500){
                 levelTwo = true;
                 cout<<"Level two selected"<<endl;
+
+                npcCollision.clear();
+                npcCollision.push_back(rect(914, 246, 5, 5, Color(0, 156, 56)));
+
                 object.clear();
-                menuOn = false;
-            }
-            else if (startOn == true && Mouse::isButtonPressed(Mouse::Left) && 690 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 990 && 300 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 500){
-                levelThree = true;
-                cout<<"Level three selected"<<endl;
-                object.clear();
+
+                player.setPosition(100, 500);
+
                 menuOn = false;
             }
 
@@ -222,6 +267,8 @@ int main()
         else {
 
             counter++;
+            dialogueTime = dialogueClock.getElapsedTime();
+            minigameOneSpawnTime = minigameOneSpawnClock.getElapsedTime();
             cout<<"Mouse x: "<<Mouse::getPosition(window).x<<"Mouse y: "<<Mouse::getPosition(window).y<<endl;
 
 
@@ -306,44 +353,171 @@ int main()
 
 
             //level one
-            if (levelOne == true && levelTwo == false && levelThree == false){
+            if (levelOne == true && levelTwo == false){
+                if (minigameOneOn == false){
+
+                    if (dialogueTime.asSeconds() < 10){
+                        playerFreeze = true;
+                        dialogueLostSoul3 = true;
+                    }
+                    else {
+                        playerFreeze = false;
+                        dialogueLostSoul3 = false;
+                    }
+
+                    for (int i = 0; i < npcCollision.size(); i++)
+                    {
+                        if (player.getGlobalBounds().intersects(npcCollision[i].getGlobalBounds())){
+                            if (Keyboard::isKeyPressed(Keyboard::E)) {
+                                player.setPosition(20, 500);
+                                dialogueClock.restart();
+                                minigameOneOn = true;
+                            }
+                        }
+                    }
+
+                } else {
+                    if (dialogueTime.asSeconds() < 5){
+                        playerFreeze = true;
+                        dialogueLostSoul1 = true;
+                    }
+                    else {
+                        object.clear();
+                        playerFreeze = false;
+                        dialogueLostSoul1 = false;
+
+                        if (player.getPosition().x > 980){
+                            minigameOneGame.clear();
+                            npcCollision.clear();
+                            levelOne = false;
+                            minigameOneOn = false;
+                            menuOn = true;
+                            startOn = true;
+                        }
+
+
+                        if (minigameOneSpawnTime.asMilliseconds() > 140){
+                            minigameOneGame.push_back(rect(rand() % 600 + 300, 0, 5, 50, Color::White));
+                            minigameOneSpawnClock.restart();
+                        }
+
+                        for (int i = 0; i < minigameOneGame.size(); i++){
+                            if (player.getGlobalBounds().intersects(minigameOneGame[i].getGlobalBounds())) {
+                                player.setPosition(20, 500);
+                            }
+
+                            minigameOneGame[i].move(0, 5);
+                        }
+                    }
+
+                }
 
             }
 
             //level two
-            else if (levelOne == false && levelTwo == true && levelThree == false){
+            else if (levelOne == false && levelTwo == true){
+                if (minigameTwoOn == false){
 
-            }
+                    if (dialogueTime.asSeconds() < 10){
+                        playerFreeze = true;
+                        dialogueLostSoul4 = true;
+                    }
+                    else {
+                        playerFreeze = false;
+                        dialogueLostSoul4 = false;
+                    }
 
-            //level three
-            else if (levelOne == false && levelTwo == false && levelThree == true){
+                    for (int i = 0; i < npcCollision.size(); i++)
+                    {
+                        if (player.getGlobalBounds().intersects(npcCollision[i].getGlobalBounds())){
+                            if (Keyboard::isKeyPressed(Keyboard::E)) {
+                                player.setPosition(20, 500);
+                                dialogueClock.restart();
+                                minigameTwoOn = true;
 
+                                object.clear();
+                                //ENTER WALL INFORMATION HERE
+                                object.push_back(rect(300, 50, 5, 100, Color::White));
+
+
+                            }
+                        }
+                    }
+
+                } else {
+                    if (dialogueTime.asSeconds() < 5){
+                        playerFreeze = true;
+                        dialogueLostSoul2 = true;
+                    }
+                    else {
+                        playerFreeze = false;
+                        dialogueLostSoul2 = false;
+
+                        if (player.getPosition().x > 980 && 950 < player.getPosition().x){
+                            npcCollision.clear();
+                            levelTwo = false;
+                            minigameTwoOn = false;
+                            menuOn = true;
+                            startOn = true;
+                        }
+
+                    }
+
+                }
             }
 
             //window drawings
             window.clear(); //clears the screen
 
-            if (levelOne == true){
+            if (levelOne == true && minigameOneOn == false){
                 window.draw(map1);
                 window.draw(lostSoul1);
+
+                if (dialogueLostSoul3 == true){
+                    window.draw(lostSoulDialogue3);
+                }
+
+            } else {
+                window.draw(minigameMap1);
+
+                if (dialogueLostSoul1 == true){
+                    window.draw(lostSoulDialogue1);
+                }
+
+                for (int i = 0; i < minigameOneGame.size(); i++){
+                    window.draw(minigameOneGame[i]);
+                }
             }
-            else if (levelTwo == true){
+
+            if (levelTwo == true && minigameTwoOn == false){
                 window.draw(map2);
                 window.draw(lostSoul2);
-            }
-            else if (levelThree == true){
-                window.draw(map3);
-                window.draw(lostSoul3);
+
+                if (dialogueLostSoul4 == true){
+                    window.draw(lostSoulDialogue4);
+                }
+
+            } else {
+                window.draw(minigameMap2);
+
+                if (dialogueLostSoul2 == true){
+                    window.draw(lostSoulDialogue2);
+                }
             }
 
             window.draw(player);
 
+            //TEMP DRAWING FOR BORDERS/COLLISIONS
             for(int i = 0; i < globalwall.size(); i++){
                 window.draw(globalwall[i]);
             }
 
             for(int i = 0; i < object.size(); i++){
                 window.draw(object[i]);
+            }
+
+            for(int i = 0; i < npcCollision.size(); i++){
+                window.draw(npcCollision[i]);
             }
 
             window.display();   //displays everything on the video card to the monitor
