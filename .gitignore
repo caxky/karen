@@ -34,7 +34,6 @@
 
 #Codeblocks files
 *.layout
-*.cbp
 *.depend
 
 # End of https://www.gitignore.io/api/c++
