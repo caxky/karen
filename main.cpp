@@ -24,7 +24,7 @@ int main()
 
 
 
-    //menus (start and level)
+    //menus (start, end, and level)
     bool startOn = false;
     int counter = 0;
 
@@ -36,6 +36,17 @@ int main()
 
     bool levelOne = false;
     bool levelTwo = false;
+
+    bool LevelOneCompleted = false;
+    bool LevelTwoCompleted = false;
+
+    Texture xtexture1 = textr("sprites/x_level1.png");
+    Sprite x_level1 = sprite(xtexture1);
+    Texture xtexture2 = textr("sprites/x_level2.png");
+    Sprite x_level2 = sprite(xtexture2);
+
+    Texture endscreentexture = textr("sprites/endscreen.png");
+    Sprite endScreen = sprite(endscreentexture);
 
 
     //introduction slides
@@ -90,6 +101,7 @@ int main()
 
     Clock dialogueClock;
     Time dialogueTime;
+
 
 
     //walls, objects, and npc collisions
@@ -148,7 +160,14 @@ int main()
                 window.close();
         }   //ends the event loop
 
-        if (introOn == true)
+        if (LevelOneCompleted == true && LevelTwoCompleted == true){
+            window.clear();
+
+            window.draw(endScreen);
+
+            window.display();
+        }
+        else if (introOn == true)
         {
             introTime = introClock.getElapsedTime();
 
@@ -218,7 +237,7 @@ int main()
                 startOn = true;
             }
 
-            if (startOn == true && Mouse::isButtonPressed(Mouse::Left) && 35 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 330 && 300 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 500) {
+            if (startOn == true && LevelOneCompleted == false && Mouse::isButtonPressed(Mouse::Left) && 171 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 471 && 297 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 497) {
                 levelOne = true;
                 cout<<"Level one selected"<<endl;
 
@@ -236,10 +255,13 @@ int main()
                 object.push_back(rect(680, 270, 340, 10, Color(230, 200, 62)));
 
                 player.setPosition(100, 100);
+                minigameOneOn = false;
+
+                dialogueClock.restart();
 
                 menuOn = false;
             }
-            else if (startOn == true && Mouse::isButtonPressed(Mouse::Left) && 360 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 660 && 300 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 500){
+            else if (startOn == true && LevelTwoCompleted == false && Mouse::isButtonPressed(Mouse::Left) && 550 < Mouse::getPosition(window).x && Mouse::getPosition(window).x < 850 && 297 < Mouse::getPosition(window).y && Mouse::getPosition(window).y < 497){
                 levelTwo = true;
                 cout<<"Level two selected"<<endl;
 
@@ -249,6 +271,9 @@ int main()
                 object.clear();
 
                 player.setPosition(100, 500);
+                minigameTwoOn = false;
+
+                dialogueClock.restart();
 
                 menuOn = false;
             }
@@ -257,6 +282,14 @@ int main()
 
             if (startOn){
                 window.draw(levels);
+
+                if (LevelOneCompleted == true){
+                    window.draw(x_level1);
+                }
+                if (LevelTwoCompleted == true){
+                    window.draw(x_level2);
+                }
+
             } else {
                 window.draw(menu);
             }
@@ -269,7 +302,7 @@ int main()
             counter++;
             dialogueTime = dialogueClock.getElapsedTime();
             minigameOneSpawnTime = minigameOneSpawnClock.getElapsedTime();
-            cout<<"Mouse x: "<<Mouse::getPosition(window).x<<"Mouse y: "<<Mouse::getPosition(window).y<<endl;
+            //cout<<"Mouse x: "<<Mouse::getPosition(window).x<<"Mouse y: "<<Mouse::getPosition(window).y<<endl;
 
 
             if (playerFreeze == false)
@@ -389,6 +422,7 @@ int main()
                         if (player.getPosition().x > 980){
                             minigameOneGame.clear();
                             npcCollision.clear();
+                            LevelOneCompleted = true;
                             levelOne = false;
                             minigameOneOn = false;
                             menuOn = true;
@@ -433,13 +467,14 @@ int main()
                             if (Keyboard::isKeyPressed(Keyboard::E)) {
                                 player.setPosition(20, 500);
                                 dialogueClock.restart();
-                                minigameTwoOn = true;
 
                                 object.clear();
                                 //ENTER WALL INFORMATION HERE
-                                object.push_back(rect(300, 50, 5, 100, Color::White));
+                                object.push_back(rect(300, 50, 5, 100, Color::Red)); //DELETE THIS
+                                object.push_back(rect(600, 0, 5, 400, Color::Green)); //DELETE THIS
 
 
+                                minigameTwoOn = true;
                             }
                         }
                     }
@@ -453,8 +488,9 @@ int main()
                         playerFreeze = false;
                         dialogueLostSoul2 = false;
 
-                        if (player.getPosition().x > 980 && 950 < player.getPosition().x){
+                        if (player.getPosition().x < 1000 && 970 < player.getPosition().x && player.getPosition().y < 235 && 205 < player.getPosition().y){
                             npcCollision.clear();
+                            LevelTwoCompleted = true;
                             levelTwo = false;
                             minigameTwoOn = false;
                             menuOn = true;
@@ -477,7 +513,7 @@ int main()
                     window.draw(lostSoulDialogue3);
                 }
 
-            } else {
+            } else if (levelOne == true && minigameOneOn == true){
                 window.draw(minigameMap1);
 
                 if (dialogueLostSoul1 == true){
@@ -497,7 +533,7 @@ int main()
                     window.draw(lostSoulDialogue4);
                 }
 
-            } else {
+            } else if (levelTwo == true && minigameTwoOn == true){
                 window.draw(minigameMap2);
 
                 if (dialogueLostSoul2 == true){
