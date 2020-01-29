@@ -20,7 +20,8 @@ int main()
     cout<<"Welcome to Karen!\n"<<endl;
     cout<<"Controls:"<<endl;
     cout<<"WASD - Move player\nE - Interact with NPC\nESC - Close game\nLeft mouse - Select level/play\n\n"<<endl;
-    cout<<"Objective of the game is to 'free the lost souls' by completing each levels minigame. First you must find the lost soul you're told to find by Michael the archangel, then you complete the minigame they give you."<<endl;
+    cout<<"Objective of the game is to 'free the lost souls' by completing each levels minigame. First you must find the lost soul you're told to find by Michael the archangel, then you complete the minigame they give you.\n\n"<<endl;
+    cout<<"To skip intro, change 'introOn' to false on line 54"<<endl;
 
 
 
@@ -50,10 +51,10 @@ int main()
 
 
     //introduction slides
-    bool introOn = false;
+    bool introOn = true;
     bool menuOn = true;
 
-    Texture introTexture = textr("sprites/Level_select.png");
+    Texture introTexture = textr("sprites/intro.png");
     Sprite intro = sprite(introTexture);
 
     Clock introClock;
@@ -66,7 +67,7 @@ int main()
 
     int slideNum = 0;
     int fadeCounter = 0;
-    int slideChanger = 3;
+    int slideChanger = 5;
 
 
     //main character
@@ -185,37 +186,25 @@ int main()
 
                 if (slideNum == 1)
                 {
-                    intro.setTextureRect(IntRect(65, 275, 200, 150));
-                    intro.setPosition(0,60);
+                    intro.setTextureRect(IntRect(0, 768, 1024, 768));
                     introClock.restart();
                 }
                 else if (slideNum == 2)
                 {
-                    intro.setTextureRect(IntRect(65, 520, 200, 150));
-                    intro.setPosition(0,60);
+                    intro.setTextureRect(IntRect(0, 1536, 1024, 768));
                     introClock.restart();
                 }
                 else if (slideNum == 3)
                 {
-                    intro.setTextureRect(IntRect(65, 766, 200, 150));
-                    intro.setPosition(0,60);
+                    intro.setTextureRect(IntRect(0, 2304, 1024, 768));
                     introClock.restart();
                 }
                 else if (slideNum == 4)
                 {
-                    intro.setTextureRect(IntRect(65, 1010, 200, 150));
-                    intro.setPosition(0,60);
+                    intro.setTextureRect(IntRect(0, 3072, 1024, 768));
                     introClock.restart();
                 }
                 else if (slideNum == 5)
-                {
-                    intro.setTextureRect(IntRect(65, 1227, 200, 350));
-                    intro.setPosition(220, 0);
-                    intro.setScale(1.8,1.8);
-                    slideChanger = 5;
-                    introClock.restart();
-                }
-                else if (slideNum == 6)
                 {
                     window.clear();
                     //roommusicsand.play();
@@ -470,8 +459,74 @@ int main()
 
                                 object.clear();
                                 //ENTER WALL INFORMATION HERE
-                                object.push_back(rect(300, 50, 5, 100, Color::Red)); //DELETE THIS
-                                object.push_back(rect(600, 0, 5, 400, Color::Green)); //DELETE THIS
+                                object.push_back(rect(111, 0, 5, 125, Color::Red));
+                                object.push_back(rect(111, 189, 5, 125, Color::Red));
+                                object.push_back(rect(224, 61, 5, 65, Color::Red));
+                                object.push_back(rect(224, 188, 5, 65, Color::Red));
+                                object.push_back(rect(169, 317, 5, 65, Color::Red));
+                                object.push_back(rect(169, 633, 5, 130, Color::Red));
+                                object.push_back(rect(281, 60, 5, 260, Color::Red));
+                                object.push_back(rect(281, 505, 5, 65, Color::Red));
+                                object.push_back(rect(338, 123, 5, 130, Color::Red));
+                                object.push_back(rect(335, 442, 5, 65, Color::Red));
+                                object.push_back(rect(335, 567, 5, 130, Color::Red));
+                                object.push_back(rect(395, 188, 5, 65, Color::Red));
+                                object.push_back(rect(395, 317, 5, 253, Color::Red));
+                                object.push_back(rect(393, 700, 5, 70, Color::Red));
+                                object.push_back(rect(450, 317, 5, 133, Color::Red));
+                                object.push_back(rect(450, 505, 5, 65, Color::Red));
+                                object.push_back(rect(504, 319, 5, 65, Color::Red));
+                                object.push_back(rect(504, 447, 5, 187, Color::Red));
+                                object.push_back(rect(558, 379, 5, 188, Color::Red));
+                                object.push_back(rect(558, 631, 5, 65, Color::Red));
+                                object.push_back(rect(615, 0, 5, 190, Color::Red));
+                                object.push_back(rect(615, 317, 5, 140, Color::Red));
+                                object.push_back(rect(615, 503, 5, 260, Color::Red));
+                                object.push_back(rect(670, 60, 5, 130, Color::Red));
+                                object.push_back(rect(670, 317, 5, 130, Color::Red));
+                                object.push_back(rect(670, 505, 5, 130, Color::Red));
+                                object.push_back(rect(726, 0, 5, 130, Color::Red));
+                                object.push_back(rect(726, 255, 5, 130, Color::Red));
+                                object.push_back(rect(783, 0, 5, 130, Color::Red));
+                                object.push_back(rect(783, 188, 5, 130, Color::Red));
+                                object.push_back(rect(839, 63, 5, 65, Color::Red));
+                                object.push_back(rect(839, 188, 5, 190, Color::Red));
+                                object.push_back(rect(839, 446, 5, 65, Color::Red));
+                                object.push_back(rect(839, 568, 5, 65, Color::Red));
+                                object.push_back(rect(890, 123, 5, 190, Color::Red));
+                                object.push_back(rect(890, 378, 5, 65, Color::Red));
+                                object.push_back(rect(890, 504, 5, 65, Color::Red));
+                                object.push_back(rect(890, 633, 5, 65, Color::Red));
+                                object.push_back(rect(955, 60, 5, 321, Color::Red));
+                                object.push_back(rect(955, 455, 5, 190, Color::Red));
+
+                                //VERTICAL
+                                object.push_back(rect(169, 62, 60, 5, Color::Red));
+                                object.push_back(rect(282, 62, 332, 5, Color::Red));
+                                object.push_back(rect(840, 62, 120, 5, Color::Red));
+                                object.push_back(rect(114, 123, 120, 5, Color::Red));
+                                object.push_back(rect(335, 123, 240, 5, Color::Red));
+                                object.push_back(rect(893, 123, 60, 5, Color::Red));
+                                object.push_back(rect(114, 189, 120, 5, Color::Red));
+                                object.push_back(rect(395, 189, 180, 5, Color::Red));
+                                object.push_back(rect(613, 187, 240, 5, Color::Red));
+                                object.push_back(rect(170, 254, 60, 5, Color::Red));
+                                object.push_back(rect(281, 253, 60, 5, Color::Red));
+                                object.push_back(rect(396, 253, 360, 5, Color::Red));
+                                object.push_back(rect(955, 253, 120, 5, Color::Red));
+                                object.push_back(rect(172, 320, 180, 5, Color::Red));
+                                object.push_back(rect(395, 320, 60, 5, Color::Red));
+                                object.push_back(rect(506, 320, 180, 5, Color::Red));
+                                object.push_back(rect(172, 320, 180, 5, Color::Red));
+                                object.push_back(rect(396, 320, 60, 5, Color::Red));
+                                object.push_back(rect(508, 320, 180, 5, Color::Red));
+                                object.push_back(rect(172, 376, 240, 5, Color::Red));
+                                object.push_back(rect(507, 380, 60, 5, Color::Red));
+                                object.push_back(rect(725, 379, 120, 5, Color::Red));
+                                object.push_back(rect(169, 444, 180, 5, Color::Red));
+                                object.push_back(rect(449, 447, 60, 5, Color::Red));
+                                object.push_back(rect(449, 447, 60, 5, Color::Red));
+                                object.push_back(rect(668, 447, 300, 5, Color::Red));
 
 
                                 minigameTwoOn = true;
@@ -544,6 +599,7 @@ int main()
             window.draw(player);
 
             //TEMP DRAWING FOR BORDERS/COLLISIONS
+            /*
             for(int i = 0; i < globalwall.size(); i++){
                 window.draw(globalwall[i]);
             }
@@ -554,7 +610,7 @@ int main()
 
             for(int i = 0; i < npcCollision.size(); i++){
                 window.draw(npcCollision[i]);
-            }
+            }*/
 
             window.display();   //displays everything on the video card to the monitor
         }   //ends the game loop
